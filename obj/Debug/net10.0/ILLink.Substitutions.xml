@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linker>
+  <assembly fullname="MinimalCut">
+    <resource name="FSharpSignatureData.MinimalCut" action="remove"></resource>
+    <resource name="FSharpSignatureCompressedData.MinimalCut" action="remove"></resource>
+    <resource name="FSharpSignatureDataB.MinimalCut" action="remove"></resource>
+    <resource name="FSharpSignatureCompressedDataB.MinimalCut" action="remove"></resource>
+    <resource name="FSharpOptimizationData.MinimalCut" action="remove"></resource>
+    <resource name="FSharpOptimizationCompressedData.MinimalCut" action="remove"></resource>
+    <resource name="FSharpOptimizationDataB.MinimalCut" action="remove"></resource>
+    <resource name="FSharpOptimizationCompressedDataB.MinimalCut" action="remove"></resource>
+    <resource name="FSharpOptimizationInfo.MinimalCut" action="remove"></resource>
+    <resource name="FSharpSignatureInfo.MinimalCut" action="remove"></resource>
+  </assembly>
+</linker>
