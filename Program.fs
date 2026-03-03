@@ -14,10 +14,14 @@ let rec private readInt prompt =
     | false, _ ->
         printfn "Hibás szám, újra!"
         readInt prompt
-let bekeresIntervall() =
+let rec bekeresIntervall() =
     let also = readInt "Alsó határ:"
     let felso = readInt "Felso hatar:"
-    { Also = also; Felso = felso }
+    if felso < also then
+        printfn "Hiba: a felső határ nem lehet kisebb, mint az alsó! Próbáld újra.\n"
+        bekeresIntervall()
+    else 
+        { Also = also; Felso = felso }
 let (|@) intervalls db =
     List.iter db intervalls
 
