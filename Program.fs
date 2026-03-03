@@ -1,6 +1,8 @@
 ﻿module InputValueModule
 open System
 
+
+
 type Intervall = {
     Also: int
     Felso: int
@@ -36,4 +38,6 @@ let main argv =
     let printDbIntervallumok i =
         printfn "[%d; %d]" i.Also i.Felso
     dbIntervallumok |@ printDbIntervallumok
+    let rendezett = dbIntervallumok |> List.sortBy _.Felso
+    rendezett |@ printDbIntervallumok
     0
