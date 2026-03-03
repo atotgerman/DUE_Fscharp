@@ -8,6 +8,12 @@ type Intervall = {
     Felso: int
 }
 
+type NodeId = int
+
+type IntervallumGraf = {
+    Nodes : (NodeId * Intervall) list
+}
+
 let rec private readInt prompt =
     printf "%s" prompt
     let input= Console.ReadLine()
@@ -40,4 +46,23 @@ let main argv =
     dbIntervallumok |@ printDbIntervallumok
     let rendezett = dbIntervallumok |> List.sortBy _.Felso
     rendezett |@ printDbIntervallumok
+
+    let minimumVagopont intervallumok =
+        let rendezett = intervallumok |> List.sortBy _.Felso
+
+        let rec greedy lista aktualisPont megoldas =
+            match lista with
+            | [] -> List.rev megoldas
+
+            | fej :: maradek ->
+              match aktualisPont with
+              | Some p when fej.Also <= p ->
+                  // már lefedett intervallum
+                  greedy maradek aktualisPont megoldas
+              | _ ->
+                  // új vágópont kell
+                  let ujPont = fej.Felso
+                  greedy maradek (Some ujPont) (ujPont :: megoldas)
+
+        greedy rendezett None []
     0
