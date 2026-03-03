@@ -34,7 +34,7 @@ let main argv =
         [ for i in 1 ..hanyszor  ->
             printfn "\n%d. intervallum:" i
             bekeresIntervall() ]
-    printfn "\nMegadott intervallumok:"
+    printfn "\nThe given intervalls:"
     let printDbIntervallumok i =
         printfn "[%d; %d]" i.Also i.Felso
     dbIntervallumok |@ printDbIntervallumok
