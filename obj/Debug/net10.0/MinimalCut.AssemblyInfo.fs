@@ -10,7 +10,7 @@ open System.Reflection
 [<assembly: System.Reflection.AssemblyCompanyAttribute("MinimalCut")>]
 [<assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")>]
 [<assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")>]
-[<assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+454b01d1fe368284b9319abee90517fb2033e78a")>]
+[<assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9005db90263a17666d4830623a092fc5ab356b04")>]
 [<assembly: System.Reflection.AssemblyProductAttribute("MinimalCut")>]
 [<assembly: System.Reflection.AssemblyTitleAttribute("MinimalCut")>]
 [<assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")>]

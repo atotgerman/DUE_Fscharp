@@ -22,6 +22,12 @@ let bekeresIntervall() =
 [<EntryPoint>]
 let main argv =
     let hanyszor = readInt "How intervalls do we have"
-    let interval = bekeresIntervall()
-    printfn "Az intervallum [%d; %d] " interval.Also interval.Felso
+    let dbIntervallumok =
+        [ for i in 1 ..hanyszor  ->
+            printfn "\n%d. intervallum:" i
+            bekeresIntervall() ]
+    printfn "\nMegadott intervallumok:"
+    dbIntervallumok
+    |> List.iter (fun i ->
+        printfn "[%d; %d]" i.Also i.Felso)
     0
