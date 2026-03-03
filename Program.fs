@@ -18,16 +18,18 @@ let bekeresIntervall() =
     let also = readInt "Alsó határ:"
     let felso = readInt "Felso hatar:"
     { Also = also; Felso = felso }
+let (|@) intervalls db =
+    List.iter db intervalls
 
 [<EntryPoint>]
 let main argv =
-    let hanyszor = readInt "How intervalls do we have"
+    let hanyszor = readInt "How many intervalls do we have"
     let dbIntervallumok =
         [ for i in 1 ..hanyszor  ->
             printfn "\n%d. intervallum:" i
             bekeresIntervall() ]
     printfn "\nMegadott intervallumok:"
-    dbIntervallumok
-    |> List.iter (fun i ->
-        printfn "[%d; %d]" i.Also i.Felso)
+    let printDbIntervallumok i =
+        printfn "[%d; %d]" i.Also i.Felso
+    dbIntervallumok |@ printDbIntervallumok
     0
