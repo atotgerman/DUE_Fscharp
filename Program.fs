@@ -21,6 +21,7 @@ let bekeresIntervall() =
 
 [<EntryPoint>]
 let main argv =
+    let hanyszor = readInt "How intervalls do we have"
     let interval = bekeresIntervall()
     printfn "Az intervallum [%d; %d] " interval.Also interval.Felso
     0
