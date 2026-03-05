@@ -65,4 +65,6 @@ let main argv =
                   greedy maradek (Some ujPont) (ujPont :: megoldas)
 
         greedy rendezett None []
+    let vagopontok = minimumVagopont dbIntervallumok
+    vagopontok |@ (fun p -> printfn "Vágópont: %d" p)
     0
