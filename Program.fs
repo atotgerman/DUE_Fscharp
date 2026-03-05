@@ -32,9 +32,36 @@ let rec bekeresIntervall() =
         { Also = also; Felso = felso }
 let (|@) intervalls db =
     List.iter db intervalls
+let rec menu () =
+    printfn ""
+    printfn "1 - Intervallumok"
+    printfn "2 - Greedy"
+    printfn "3 - Random teszt"
+    printfn "0 - Kilépés"
+
+    match Console.ReadLine() with
+    | "1" ->
+        printfn "Intervallum bevitel"
+        menu()
+
+    | "2" ->
+        printfn "Greedy algoritmus fut"
+        menu()
+
+    | "3" ->
+        printfn "Random teszt"
+        menu()
+
+    | "0" ->
+        printfn "Kilépés"
+
+    | _ ->
+        printfn "Hibás választás"
+        menu()
 
 [<EntryPoint>]
 let main argv =
+    menu()
     let hanyszor = readInt "How many intervalls do we have"
     let dbIntervallumok =
         [ for i in 1 ..hanyszor  ->
