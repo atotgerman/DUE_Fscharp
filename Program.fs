@@ -14,14 +14,46 @@ type IntervallumGraf = {
     Nodes : (NodeId * Intervall) list
 }
 
-let rec private readInt prompt =
+let flashError () =
+    let oldBg = Console.BackgroundColor
+    let oldFg = Console.ForegroundColor
+
+    Console.BackgroundColor <- ConsoleColor.Red
+    Console.ForegroundColor <- ConsoleColor.White
+    printf " "
+    System.Threading.Thread.Sleep(80)
+    printf "\b"
+
+    Console.BackgroundColor <- oldBg
+    Console.ForegroundColor <- oldFg
+
+let readInt prompt =
     printf "%s" prompt
-    let input= Console.ReadLine()
-    match Int32.TryParse(input) with
-    | true, value -> value 
-    | false, _ ->
-        printfn "Hibás szám, újra!"
-        readInt prompt
+    let rec loop (acc:string) =
+        let key = Console.ReadKey(true)
+
+        match key.Key with
+        | ConsoleKey.Enter ->
+            printfn ""
+            if acc = "" then 0 else Int32.Parse(acc)
+
+        | ConsoleKey.Backspace ->
+            if acc.Length > 0 then
+                printf "\b \b"
+                loop (acc.Substring(0, acc.Length - 1))
+            else
+                Console.Beep()
+                loop acc
+
+        | _ ->
+            if Char.IsDigit(key.KeyChar) then
+                printf "%c" key.KeyChar
+                loop (acc + string key.KeyChar)
+            else
+                flashError()
+                loop acc
+
+    loop ""
 let rec bekeresIntervall() =
     let also = readInt "Alsó határ:"
     let felso = readInt "Felso hatar:"
