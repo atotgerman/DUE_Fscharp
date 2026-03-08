@@ -1,6 +1,6 @@
 ﻿module InputValueModule
 open System
-
+open System.Diagnostics
 
 
 type Intervall = {
@@ -126,4 +126,42 @@ let main argv =
         greedy rendezett None []
     let vagopontok = minimumVagopont dbIntervallumok
     vagopontok |@ (fun p -> printfn "Vágópont: %d" p)
+    let graf : IntervallumGraf =
+        { Nodes =
+          dbIntervallumok
+          |> List.mapi (fun i intervall -> (i+1, intervall))
+        }
+    let exportGraphviz (graf: IntervallumGraf) =
+        let nodes =
+            graf.Nodes
+            |> List.map (fun (id,i) ->
+               sprintf "  %d [label=\"[%d,%d]\"];" id i.Also i.Felso)
+
+        let edges =
+            graf.Nodes
+            |> List.collect (fun (id1,i1) ->
+               graf.Nodes
+               |> List.choose (fun (id2,i2) ->
+                  if id1 < id2 && i1.Also <= i2.Felso && i2.Also <= i1.Felso then
+                     Some (sprintf "  %d -- %d;" id1 id2)
+                  else None))
+
+        let dot =
+            ["graph G {"]
+            @ nodes
+            @ edges
+            @ ["}"]
+
+        System.IO.File.WriteAllLines("intervallumgraf.dot", dot)
+    let runGraphviz () =
+            let psi = ProcessStartInfo()
+            psi.FileName <- "dot"
+            psi.Arguments <- "-Tpng intervallumgraf.dot -o graf.png"
+            psi.UseShellExecute <- false
+            psi.CreateNoWindow <- true
+
+            let p = Process.Start(psi)
+            p.WaitForExit()   
+    exportGraphviz graf
+    runGraphviz()
     0
