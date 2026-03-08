@@ -135,7 +135,8 @@ let main argv =
         let nodes =
             graf.Nodes
             |> List.map (fun (id,i) ->
-               sprintf "  %d [label=\"[%d,%d]\"];" id i.Also i.Felso)
+                sprintf "  %d [label=\"%d\", style=filled, fillcolor=lightblue, tooltip=\"[%d,%d]\"];" 
+                  id id i.Also i.Felso)
 
         let edges =
             graf.Nodes
@@ -147,10 +148,13 @@ let main argv =
                   else None))
 
         let dot =
-            ["graph G {"]
-            @ nodes
-            @ edges
-            @ ["}"]
+            ["graph G {"
+             "  layout=neato;"
+             "  overlap=false;"
+             "  splines=true;"]
+             @ nodes
+             @ edges
+             @ ["}"]
 
         System.IO.File.WriteAllLines("intervallumgraf.dot", dot)
     let runGraphviz () =
@@ -164,4 +168,5 @@ let main argv =
             p.WaitForExit()   
     exportGraphviz graf
     runGraphviz()
+    Process.Start("graf.png") |> ignore
     0
