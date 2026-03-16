@@ -14,6 +14,25 @@ type IntervallumGraf = {
     Nodes : (NodeId * Intervall) list
 }
 
+let minimumVagopont intervallumok =
+        let rendezett = intervallumok |> List.sortBy _.Felso
+
+        let rec greedy lista aktualisPont megoldas =
+            match lista with
+            | [] -> List.rev megoldas
+
+            | fej :: maradek ->
+              match aktualisPont with
+              | Some p when fej.Also <= p ->
+                  // már lefedett intervallum
+                  greedy maradek aktualisPont megoldas
+              | _ ->
+                  // új vágópont kell
+                  let ujPont = fej.Felso
+                  greedy maradek (Some ujPont) (ujPont :: megoldas)
+
+        greedy rendezett None []
+
 let flashError () =
     let oldBg = Console.BackgroundColor
     let oldFg = Console.ForegroundColor
@@ -54,6 +73,15 @@ let readInt prompt =
                 loop acc
 
     loop ""
+let randomIntervallumok db =
+    let rnd = Random()
+
+    [ for _ in 1..db ->
+        let a = rnd.Next(0,100)
+        let b = rnd.Next(a, a + rnd.Next(1,50))
+        { Also = a; Felso = b } ]
+let printDbIntervallumok i =
+        printfn "[%d; %d]" i.Also i.Felso
 let rec bekeresIntervall() =
     let also = readInt "Alsó határ:"
     let felso = readInt "Felso hatar:"
@@ -81,7 +109,14 @@ let rec menu () =
         menu()
 
     | "3" ->
-        printfn "Random teszt"
+        printfn "random intervallum generálása..."
+        let db = readInt "Hány intervallumot generáljunk? "
+        let randomLista = randomIntervallumok 10
+        printfn "Generált intervallumok:"
+        randomLista |@ printDbIntervallumok
+        let vagopontok = minimumVagopont randomLista
+        printfn "Vágópontok:"
+        vagopontok |@ (fun p -> printfn "%d" p)
         menu()
 
     | "0" ->
@@ -100,30 +135,11 @@ let main argv =
             printfn "\n%d. intervallum:" i
             bekeresIntervall() ]
     printfn "\nThe given intervalls:"
-    let printDbIntervallumok i =
-        printfn "[%d; %d]" i.Also i.Felso
     dbIntervallumok |@ printDbIntervallumok
     let rendezett = dbIntervallumok |> List.sortBy _.Felso
     rendezett |@ printDbIntervallumok
 
-    let minimumVagopont intervallumok =
-        let rendezett = intervallumok |> List.sortBy _.Felso
-
-        let rec greedy lista aktualisPont megoldas =
-            match lista with
-            | [] -> List.rev megoldas
-
-            | fej :: maradek ->
-              match aktualisPont with
-              | Some p when fej.Also <= p ->
-                  // már lefedett intervallum
-                  greedy maradek aktualisPont megoldas
-              | _ ->
-                  // új vágópont kell
-                  let ujPont = fej.Felso
-                  greedy maradek (Some ujPont) (ujPont :: megoldas)
-
-        greedy rendezett None []
+    
     let vagopontok = minimumVagopont dbIntervallumok
     vagopontok |@ (fun p -> printfn "Vágópont: %d" p)
     let graf : IntervallumGraf =
