@@ -141,7 +141,36 @@ let rec menu () =
         vagopontok |@ (fun p -> printfn "%d" p)
         menu()
     | "4" ->
+        printfn "Greedy vs BruteForce összehasonlítás"
 
+        let db = readInt "Hány intervallumot generáljunk? (max 15 ajánlott!) "
+
+        let intervallumok = randomIntervallumok db
+
+        printfn "\nIntervallumok:"
+        intervallumok |> List.take (min db 20) |@ printDbIntervallumok
+
+        // GREEDY
+        let sw1 = Stopwatch.StartNew()
+        let greedyResult = minimumVagopont intervallumok
+        sw1.Stop()
+
+        // BRUTE FORCE
+        let sw2 = Stopwatch.StartNew()
+        let bruteResult = minimumVagopontBrute intervallumok
+        sw2.Stop()
+
+        printfn "\n--- EREDMÉNYEK ---"
+
+        printfn "Greedy vágópontok száma: %d" greedyResult.Length
+        printfn "Greedy idő: %d ms" sw1.ElapsedMilliseconds
+
+        printfn "\nBrute force vágópontok száma: %d" bruteResult.Length
+        printfn "Brute force idő: %d ms" sw2.ElapsedMilliseconds
+
+        printfn "\nMegoldások egyeznek? %b" (greedyResult.Length = bruteResult.Length)
+
+        menu()
     | "0" ->
         printfn "Kilépés"
 
