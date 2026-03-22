@@ -92,11 +92,33 @@ let rec bekeresIntervall() =
         { Also = also; Felso = felso }
 let (|@) intervalls db =
     List.iter db intervalls
+let lefed (pontok:int list) (intervallumok:Intervall list) =
+    intervallumok
+    |> List.forall (fun i ->
+        pontok |> List.exists (fun p -> i.Also <= p && p <= i.Felso))
+let rec subsets list =
+    match list with
+    | [] -> [[]]
+    | x::xs ->
+        let rest = subsets xs
+        rest @ (rest |> List.map (fun r -> x::r))
+let minimumVagopontBrute intervallumok =
+    let pontok =
+        intervallumok
+        |> List.map (fun i -> i.Felso)
+        |> List.distinct
+
+    let osszes = subsets pontok
+
+    osszes
+    |> List.filter (fun p -> lefed p intervallumok)
+    |> List.minBy List.length        
 let rec menu () =
     printfn ""
     printfn "1 - Intervallumok"
     printfn "2 - Greedy"
     printfn "3 - Random teszt"
+    printfn "4 - Greedy and BruteForce simaulation" 
     printfn "0 - Kilépés"
 
     match Console.ReadLine() with
@@ -118,6 +140,7 @@ let rec menu () =
         printfn "Vágópontok:"
         vagopontok |@ (fun p -> printfn "%d" p)
         menu()
+    | "4" ->
 
     | "0" ->
         printfn "Kilépés"
