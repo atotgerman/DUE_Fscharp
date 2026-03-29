@@ -197,6 +197,10 @@ let rec menu () =
         let vagopontok = minimumVagopont randomLista
         printfn "Vágópontok:"
         vagopontok |@ (fun p -> printfn "%d" p)
+        let actualGraf = graf randomLista
+        exportGraphviz actualGraf
+        runGraphviz()
+        Process.Start(ProcessStartInfo("graf.png", UseShellExecute = true)) |> ignore
         menu()
     | "4" ->
         printfn "Greedy vs BruteForce összehasonlítás"
