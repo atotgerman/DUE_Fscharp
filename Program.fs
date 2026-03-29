@@ -181,7 +181,7 @@ let rec menu () =
         let actualGraf = graf dbIntervallumok
         exportGraphviz actualGraf
         runGraphviz()
-        Process.Start("graf.png") |> ignore
+        Process.Start(ProcessStartInfo("graf.png", UseShellExecute = true)) |> ignore
         menu()
 
     | "2" ->
