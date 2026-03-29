@@ -113,6 +113,47 @@ let minimumVagopontBrute intervallumok =
     osszes
     |> List.filter (fun p -> lefed p intervallumok)
     |> List.minBy List.length        
+
+let graf (nodeIntervall: Intervall list): IntervallumGraf =
+        { Nodes =
+          nodeIntervall
+          |> List.mapi (fun i intervall -> (i+1, intervall))
+        }
+let exportGraphviz (graf: IntervallumGraf) =
+        let nodes =
+            graf.Nodes
+            |> List.map (fun (id,i) ->
+                sprintf "  %d [label=\"%d\", style=filled, fillcolor=lightblue, tooltip=\"[%d,%d]\"];" 
+                  id id i.Also i.Felso)
+
+        let edges =
+            graf.Nodes
+            |> List.collect (fun (id1,i1) ->
+               graf.Nodes
+               |> List.choose (fun (id2,i2) ->
+                  if id1 < id2 && i1.Also <= i2.Felso && i2.Also <= i1.Felso then
+                     Some (sprintf "  %d -- %d;" id1 id2)
+                  else None))
+
+        let dot =
+            ["graph G {"
+             "  layout=neato;"
+             "  overlap=false;"
+             "  splines=true;"]
+             @ nodes
+             @ edges
+             @ ["}"]
+
+        System.IO.File.WriteAllLines("intervallumgraf.dot", dot)
+let runGraphviz () =
+            let psi = ProcessStartInfo()
+            psi.FileName <- "dot"
+            psi.Arguments <- "-Tpng intervallumgraf.dot -o graf.png"
+            psi.UseShellExecute <- false
+            psi.CreateNoWindow <- true
+
+            let p = Process.Start(psi)
+            p.WaitForExit()
 let rec menu () =
     printfn ""
     printfn "1 - Intervallumok"
@@ -124,6 +165,23 @@ let rec menu () =
     match Console.ReadLine() with
     | "1" ->
         printfn "Intervallum bevitel"
+        let hanyszor = readInt "How many intervalls do we have"
+        let dbIntervallumok =
+            [ for i in 1 ..hanyszor  ->
+                printfn "\n%d. intervallum:" i
+                bekeresIntervall() ]
+        printfn "\nThe given intervalls:"
+        dbIntervallumok |@ printDbIntervallumok
+        let rendezett = dbIntervallumok |> List.sortBy _.Felso
+        rendezett |@ printDbIntervallumok
+
+
+        let vagopontok = minimumVagopont dbIntervallumok
+        vagopontok |@ (fun p -> printfn "Vágópont: %d" p)
+        let actualGraf = graf dbIntervallumok
+        exportGraphviz actualGraf
+        runGraphviz()
+        Process.Start("graf.png") |> ignore
         menu()
 
     | "2" ->
@@ -197,60 +255,4 @@ let rec menu () =
 [<EntryPoint>]
 let main argv =
     menu()
-    let hanyszor = readInt "How many intervalls do we have"
-    let dbIntervallumok =
-        [ for i in 1 ..hanyszor  ->
-            printfn "\n%d. intervallum:" i
-            bekeresIntervall() ]
-    printfn "\nThe given intervalls:"
-    dbIntervallumok |@ printDbIntervallumok
-    let rendezett = dbIntervallumok |> List.sortBy _.Felso
-    rendezett |@ printDbIntervallumok
-
-    
-    let vagopontok = minimumVagopont dbIntervallumok
-    vagopontok |@ (fun p -> printfn "Vágópont: %d" p)
-    let graf : IntervallumGraf =
-        { Nodes =
-          dbIntervallumok
-          |> List.mapi (fun i intervall -> (i+1, intervall))
-        }
-    let exportGraphviz (graf: IntervallumGraf) =
-        let nodes =
-            graf.Nodes
-            |> List.map (fun (id,i) ->
-                sprintf "  %d [label=\"%d\", style=filled, fillcolor=lightblue, tooltip=\"[%d,%d]\"];" 
-                  id id i.Also i.Felso)
-
-        let edges =
-            graf.Nodes
-            |> List.collect (fun (id1,i1) ->
-               graf.Nodes
-               |> List.choose (fun (id2,i2) ->
-                  if id1 < id2 && i1.Also <= i2.Felso && i2.Also <= i1.Felso then
-                     Some (sprintf "  %d -- %d;" id1 id2)
-                  else None))
-
-        let dot =
-            ["graph G {"
-             "  layout=neato;"
-             "  overlap=false;"
-             "  splines=true;"]
-             @ nodes
-             @ edges
-             @ ["}"]
-
-        System.IO.File.WriteAllLines("intervallumgraf.dot", dot)
-    let runGraphviz () =
-            let psi = ProcessStartInfo()
-            psi.FileName <- "dot"
-            psi.Arguments <- "-Tpng intervallumgraf.dot -o graf.png"
-            psi.UseShellExecute <- false
-            psi.CreateNoWindow <- true
-
-            let p = Process.Start(psi)
-            p.WaitForExit()   
-    exportGraphviz graf
-    runGraphviz()
-    Process.Start("graf.png") |> ignore
     0
