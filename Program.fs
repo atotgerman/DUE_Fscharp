@@ -160,6 +160,10 @@ let rec menu () =
         let bruteResult = minimumVagopontBrute intervallumok
         sw2.Stop()
 
+        // Check Brute Force and greedy
+        let isSame (a:int list) (b:int list) =
+            Set.ofList a = Set.ofList b
+
         printfn "\n--- EREDMÉNYEK ---"
 
         printfn "Greedy vágópontok száma: %d" greedyResult.Length
@@ -168,7 +172,7 @@ let rec menu () =
         printfn "\nBrute force vágópontok száma: %d" bruteResult.Length
         printfn "Brute force idő: %d ms" sw2.ElapsedMilliseconds
 
-        printfn "\nMegoldások egyeznek? %b" (greedyResult.Length = bruteResult.Length)
+        printfn "\nMegoldások egyeznek? %b" (isSame greedyResult bruteResult)
 
         menu()
     | "0" ->
