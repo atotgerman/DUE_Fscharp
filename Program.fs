@@ -1,7 +1,8 @@
 ﻿module InputValueModule
 open System
 open System.Diagnostics
-
+open System.Windows.Forms
+open System.Drawing
 
 type Intervall = {
     Also: int
