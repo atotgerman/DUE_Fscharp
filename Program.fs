@@ -133,7 +133,7 @@ let rec menu () =
     | "3" ->
         printfn "random intervallum generálása..."
         let db = readInt "Hány intervallumot generáljunk? "
-        let randomLista = randomIntervallumok 10
+        let randomLista = randomIntervallumok db
         printfn "Generált intervallumok:"
         randomLista |@ printDbIntervallumok
         let vagopontok = minimumVagopont randomLista
