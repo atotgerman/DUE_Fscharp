@@ -119,12 +119,24 @@ let graf (nodeIntervall: Intervall list): IntervallumGraf =
           nodeIntervall
           |> List.mapi (fun i intervall -> (i+1, intervall))
         }
-let exportGraphviz (graf: IntervallumGraf) =
+let exportGraphviz (graf: IntervallumGraf) (vagopontok:int list)=
         let nodes =
             graf.Nodes
             |> List.map (fun (id,i) ->
-                sprintf "  %d [label=\"%d\", style=filled, fillcolor=lightblue, tooltip=\"[%d,%d]\"];" 
-                  id id i.Also i.Felso)
+
+                let containsCutPoint =
+                    vagopontok
+                    |> List.exists (fun p -> i.Also <= p && p <= i.Felso)
+
+                if containsCutPoint then
+                    // 🔴 piros
+                    sprintf "  %d [label=\"[%d,%d]\", style=filled, fillcolor=red];"
+                        id i.Also i.Felso
+                else
+                    // 🔵 kék
+                     sprintf "  %d [label=\"[%d,%d]\", style=filled, fillcolor=lightblue];"
+                         id i.Also i.Felso
+        )
 
         let edges =
             graf.Nodes
@@ -179,7 +191,7 @@ let rec menu () =
         let vagopontok = minimumVagopont dbIntervallumok
         vagopontok |@ (fun p -> printfn "Vágópont: %d" p)
         let actualGraf = graf dbIntervallumok
-        exportGraphviz actualGraf
+        exportGraphviz actualGraf vagopontok
         runGraphviz()
         Process.Start(ProcessStartInfo("graf.png", UseShellExecute = true)) |> ignore
         menu()
