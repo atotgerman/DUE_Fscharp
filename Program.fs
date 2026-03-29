@@ -171,7 +171,7 @@ let rec menu () =
             if Set.isEmpty onlyGreedy && Set.isEmpty onlybruteForce then
                printfn("The two solution sare the same")
             else
-                let union = Set.union setGreedy setbruteForce
+                let union = Set.union onlyGreedy onlybruteForce
                 printfn "The point that are different: %A" union 
 
         printfn "\n--- EREDMÉNYEK ---"
