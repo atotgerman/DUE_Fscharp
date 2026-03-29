@@ -17,21 +17,21 @@ type IntervallumGraf = {
 let minimumVagopont intervallumok =
         let rendezett = intervallumok |> List.sortBy _.Felso
 
-        let rec greedy lista aktualisPont megoldas =
+        let rec greedy lista aktualisPont megoldas selected =
             match lista with
-            | [] -> List.rev megoldas
+            | [] -> List.rev megoldas, List.rev selected
 
             | fej :: maradek ->
               match aktualisPont with
               | Some p when fej.Also <= p ->
                   // már lefedett intervallum
-                  greedy maradek aktualisPont megoldas
+                  greedy maradek aktualisPont megoldas selected
               | _ ->
                   // új vágópont kell
                   let ujPont = fej.Felso
-                  greedy maradek (Some ujPont) (ujPont :: megoldas)
+                  greedy maradek (Some ujPont) (ujPont :: megoldas) (fej :: selected)
 
-        greedy rendezett None []
+        greedy rendezett None [] []
 
 let flashError () =
     let oldBg = Console.BackgroundColor
@@ -119,21 +119,19 @@ let graf (nodeIntervall: Intervall list): IntervallumGraf =
           nodeIntervall
           |> List.mapi (fun i intervall -> (i+1, intervall))
         }
-let exportGraphviz (graf: IntervallumGraf) (vagopontok:int list)=
+let exportGraphviz (graf: IntervallumGraf) (cutIntval:Intervall list)=
         let nodes =
             graf.Nodes
             |> List.map (fun (id,i) ->
 
-                let containsCutPoint =
-                    vagopontok
-                    |> List.exists (fun p -> i.Also <= p && p <= i.Felso)
+                let containsCutPoint = List.contains i cutIntval
 
                 if containsCutPoint then
-                    // 🔴 piros
+                    
                     sprintf "  %d [label=\"[%d,%d]\", style=filled, fillcolor=red];"
                         id i.Also i.Felso
                 else
-                    // 🔵 kék
+                    
                      sprintf "  %d [label=\"[%d,%d]\", style=filled, fillcolor=lightblue];"
                          id i.Also i.Felso
         )
@@ -187,11 +185,10 @@ let rec menu () =
         let rendezett = dbIntervallumok |> List.sortBy _.Felso
         rendezett |@ printDbIntervallumok
 
-
-        let vagopontok = minimumVagopont dbIntervallumok
+        let (vagopontok, selected) = minimumVagopont dbIntervallumok
         vagopontok |@ (fun p -> printfn "Vágópont: %d" p)
         let actualGraf = graf dbIntervallumok
-        exportGraphviz actualGraf vagopontok
+        exportGraphviz actualGraf selected
         runGraphviz()
         Process.Start(ProcessStartInfo("graf.png", UseShellExecute = true)) |> ignore
         menu()
@@ -206,11 +203,11 @@ let rec menu () =
         let randomLista = randomIntervallumok db
         printfn "Generált intervallumok:"
         randomLista |@ printDbIntervallumok
-        let vagopontok = minimumVagopont randomLista
+        let (vagopontok,selected) = minimumVagopont randomLista
         printfn "Vágópontok:"
         vagopontok |@ (fun p -> printfn "%d" p)
         let actualGraf = graf randomLista
-        exportGraphviz actualGraf
+        exportGraphviz actualGraf selected
         runGraphviz()
         Process.Start(ProcessStartInfo("graf.png", UseShellExecute = true)) |> ignore
         menu()
@@ -226,7 +223,7 @@ let rec menu () =
 
         // GREEDY
         let sw1 = Stopwatch.StartNew()
-        let greedyResult = minimumVagopont intervallumok
+        let (greedyPoints, greedyIntervals) = minimumVagopont intervallumok
         sw1.Stop()
 
         // BRUTE FORCE
@@ -252,13 +249,13 @@ let rec menu () =
 
         printfn "\n--- EREDMÉNYEK ---"
 
-        printfn "Greedy vágópontok száma: %d" greedyResult.Length
+        printfn "Greedy vágópontok száma: %d" greedyPoints.Length
         printfn "Greedy idő: %d ms" sw1.ElapsedMilliseconds
 
         printfn "\nBrute force vágópontok száma: %d" bruteResult.Length
         printfn "Brute force idő: %d ms" sw2.ElapsedMilliseconds
 
-        printfn "\nMegoldások egyeznek? %b" (isSame greedyResult bruteResult)
+        printfn "\nMegoldások egyeznek? %b" (isSame greedyPoints bruteResult)
 
         menu()
     | "0" ->
