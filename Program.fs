@@ -200,6 +200,9 @@ let runGui () =
     picture.Click.Add(fun _ ->
     statusLabel.Text <- "Kép megnyitva új ablakban"
     )
+    picture.MouseLeave.Add(fun _ ->
+    statusLabel.Text <- "Kész"
+    )
     picture.Click.Add(fun _ ->
     if picture.Image <> null then
         let viewer = new Form(Text="Nagyított nézet", Width=1200, Height=800)
