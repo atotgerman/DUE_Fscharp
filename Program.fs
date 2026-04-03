@@ -165,6 +165,35 @@ let runGraphviz () =
 
             let p = Process.Start(psi)
             p.WaitForExit()
+let runGui () =
+    let form = new Form(Text="Intervallum vizualizáló", Width=900, Height=600)
+
+    let input = new TextBox(Left=10, Top=10, Width=100, Text="10")
+    let btn = new Button(Left=120, Top=10, Text="Generate & Run")
+
+    let picture = new PictureBox(Left=10, Top=50, Width=850, Height=500)
+    picture.SizeMode <- PictureBoxSizeMode.Zoom
+
+    btn.Click.Add(fun _ ->
+        let db = Int32.Parse(input.Text)
+
+        let data = randomIntervallumok db
+        let (points, selected) = minimumVagopont data
+        let g = graf data
+
+        exportGraphviz g selected
+        runGraphviz()
+
+        // kép frissítés
+        picture.Image <- null
+        picture.Image <- Image.FromFile("graf.png")
+    )
+
+    form.Controls.Add(input)
+    form.Controls.Add(btn)
+    form.Controls.Add(picture)
+
+    Application.Run(form)
 let rec menu () =
     printfn ""
     printfn "1 - Intervallumok"
@@ -268,5 +297,5 @@ let rec menu () =
 
 [<EntryPoint>]
 let main argv =
-    menu()
+    runGui()
     0
