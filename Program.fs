@@ -294,11 +294,11 @@ let rec menu () =
     | _ ->
         printfn "Hibás választás"
         menu()
-
-[<EntryPoint>]
-let main argv =
-    let main argv =
+let runApp argv =
         match argv with
         | [| "gui" |] -> runGui()
         | _ -> menu()
+[<EntryPoint>]
+let main argv =
+    runApp argv
     0
