@@ -297,5 +297,8 @@ let rec menu () =
 
 [<EntryPoint>]
 let main argv =
-    runGui()
+    let main argv =
+        match argv with
+        | [| "gui" |] -> runGui()
+        | _ -> menu()
     0
