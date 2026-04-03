@@ -173,7 +173,12 @@ let runGui () =
 
     let picture = new PictureBox(Left=10, Top=50, Width=850, Height=500)
     picture.SizeMode <- PictureBoxSizeMode.Zoom
+    let status = new StatusStrip()
+    let statusLabel = new ToolStripStatusLabel("")
 
+    status.Items.Add(statusLabel) |> ignore
+    form.Controls.Add(status)
+    
     btn.Click.Add(fun _ ->
         let db = Int32.Parse(input.Text)
 
@@ -188,6 +193,24 @@ let runGui () =
         picture.Image <- null
         picture.Image <- Image.FromFile("graf.png")
     )
+    picture.MouseEnter.Add(fun _ ->
+    if picture.Image <> null then
+        statusLabel.Text <- "Kattints a képre a nagyításhoz"
+    )
+    picture.Click.Add(fun _ ->
+    statusLabel.Text <- "Kép megnyitva új ablakban"
+    )
+    picture.Click.Add(fun _ ->
+    if picture.Image <> null then
+        let viewer = new Form(Text="Nagyított nézet", Width=1200, Height=800)
+
+        let bigPic = new PictureBox(Dock=DockStyle.Fill)
+        bigPic.Image <- picture.Image
+        bigPic.SizeMode <- PictureBoxSizeMode.Zoom
+
+        viewer.Controls.Add(bigPic)
+        viewer.Show()
+    )   
 
     form.Controls.Add(input)
     form.Controls.Add(btn)
