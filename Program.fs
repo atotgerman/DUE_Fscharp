@@ -210,7 +210,8 @@ let runGui () =
         match picture.Image with
         | null -> ()
         | img -> img.Dispose()
-        picture.SizeMode <- PictureBoxSizeMode.AutoSize
+        picture.SizeMode <- PictureBoxSizeMode.Zoom
+        picture.Dock <- DockStyle.Fill
 
     // új kép betöltése
         picture.Image <- loadImage "graf.png"
