@@ -189,8 +189,13 @@ let runGui () =
     btn.Dock <- DockStyle.Top
     panel.Dock <- DockStyle.Fill
     status.Dock <- DockStyle.Bottom
+    let centerImage () =
+        if picture.Image <> null then
+            let x = (panel.ClientSize.Width - picture.Width) / 2
+            let y = (panel.ClientSize.Height - picture.Height) / 2
+            picture.Location <- Point(max x 0, max y 0)
     form.Controls.Add(status)
-    
+    panel.Resize.Add(fun _ -> centerImage())
     btn.Click.Add(fun _ ->
         let db = Int32.Parse(input.Text)
 
@@ -205,9 +210,11 @@ let runGui () =
         match picture.Image with
         | null -> ()
         | img -> img.Dispose()
+        picture.SizeMode <- PictureBoxSizeMode.AutoSize
 
     // új kép betöltése
         picture.Image <- loadImage "graf.png"
+        centerImage()
     )
     picture.MouseEnter.Add(fun _ ->
     if picture.Image <> null then
