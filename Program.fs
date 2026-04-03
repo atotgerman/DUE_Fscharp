@@ -3,6 +3,7 @@ open System
 open System.Diagnostics
 open System.Windows.Forms
 open System.Drawing
+open System.IO
 
 type Intervall = {
     Also: int
@@ -165,33 +166,48 @@ let runGraphviz () =
 
             let p = Process.Start(psi)
             p.WaitForExit()
+let loadImage path =
+    use fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+    Image.FromStream(fs)
 let runGui () =
+ 
     let form = new Form(Text="Intervallum vizualizáló", Width=900, Height=600)
 
-    let input = new TextBox(Left=10, Top=10, Width=100, Text="10")
-    let btn = new Button(Left=120, Top=10, Text="Generate & Run")
-
-    let picture = new PictureBox(Left=10, Top=50, Width=850, Height=500)
+    let panel = new Panel()
+    panel.AutoScroll <- true
+    let input = new TextBox(Text="10")
+    let btn = new Button(Text="Generate & Run")
+    let picture = new PictureBox()
     picture.SizeMode <- PictureBoxSizeMode.Zoom
+    panel.Controls.Add(picture)
+
     let status = new StatusStrip()
     let statusLabel = new ToolStripStatusLabel("")
 
     status.Items.Add(statusLabel) |> ignore
+    input.Dock <- DockStyle.Top
+    btn.Dock <- DockStyle.Top
+    panel.Dock <- DockStyle.Fill
+    status.Dock <- DockStyle.Bottom
     form.Controls.Add(status)
     
     btn.Click.Add(fun _ ->
         let db = Int32.Parse(input.Text)
 
         let data = randomIntervallumok db
-        let (points, selected) = minimumVagopont data
+        let (_, selected) = minimumVagopont data
         let g = graf data
 
         exportGraphviz g selected
         runGraphviz()
 
-        // kép frissítés
-        picture.Image <- null
-        picture.Image <- Image.FromFile("graf.png")
+    // régi kép törlése
+        match picture.Image with
+        | null -> ()
+        | img -> img.Dispose()
+
+    // új kép betöltése
+        picture.Image <- loadImage "graf.png"
     )
     picture.MouseEnter.Add(fun _ ->
     if picture.Image <> null then
@@ -214,10 +230,11 @@ let runGui () =
         viewer.Controls.Add(bigPic)
         viewer.Show()
     )   
-
-    form.Controls.Add(input)
+    
+    form.Controls.Add(panel)
     form.Controls.Add(btn)
-    form.Controls.Add(picture)
+    form.Controls.Add(input)
+    form.Controls.Add(status)
 
     Application.Run(form)
 let rec menu () =
