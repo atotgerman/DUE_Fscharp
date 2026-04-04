@@ -169,54 +169,136 @@ let runGraphviz () =
 let loadImage path =
     use fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
     Image.FromStream(fs)
+let drawIntervals (intervals: Intervall list) =
+    let width = 800
+    let height = 400
+
+    let bmp = new Bitmap(width, height)
+    use g = Graphics.FromImage(bmp)
+
+    g.Clear(Color.White)
+
+    let pen = new Pen(Color.Blue, 2.0f)
+    let axisPen = new Pen(Color.Black, 2.0f)
+
+    g.DrawLine(axisPen, 50, height - 50, width - 50, height - 50)
+
+    let minInterval = intervals |> List.minBy (fun i -> i.Also)
+    let maxInterval = intervals |> List.maxBy (fun i -> i.Felso)
+
+    let minX = minInterval.Also
+    let maxX = maxInterval.Felso
+
+    let scale x =
+        50 + (x - minX) * (width - 100) / (maxX - minX + 1)
+
+    let mutable rows : (int list) list = []
+
+    let getRow (start, finish) =
+        let rec findRow i =
+            if i >= rows.Length then
+                rows <- rows @ [[finish]]
+                i
+            else
+                let lastEnd = rows.[i] |> List.last
+                if start > lastEnd then
+                    rows <- rows |> List.mapi (fun idx r ->
+                        if idx = i then r @ [finish] else r)
+                    i
+                else
+                    findRow (i + 1)
+        findRow 0
+
+    for i in intervals do
+        let s = i.Also
+        let e = i.Felso
+
+        let row = getRow (s, e)
+        let y = height - 70 - row * 30
+
+        let x1 = scale s
+        let x2 = scale e
+
+        g.DrawLine(pen, x1, y, x2, y)
+        g.FillEllipse(Brushes.Red, x1 - 3, y - 3, 6, 6)
+        g.FillEllipse(Brushes.Red, x2 - 3, y - 3, 6, 6)
+
+    bmp
 let runGui () =
  
     let form = new Form(Text="Intervallum vizualizáló", Width=900, Height=600)
-
-    let panel = new Panel()
-    panel.AutoScroll <- true
+    let combo = new ComboBox()
+    combo.Items.AddRange([| "Gráf"; "Intervallum" |])
+    combo.SelectedIndex <- 0
+    
     let input = new TextBox(Text="10")
     let btn = new Button(Text="Generate & Run")
     let picture = new PictureBox()
     picture.SizeMode <- PictureBoxSizeMode.Zoom
-    panel.Controls.Add(picture)
+    let split = new SplitContainer()
+    split.Dock <- DockStyle.Fill
+    split.Orientation <- Orientation.Vertical
+    split.SplitterDistance <- 450
 
     let status = new StatusStrip()
     let statusLabel = new ToolStripStatusLabel("")
 
+    let pictureLeft = new PictureBox()
+    pictureLeft.Dock <- DockStyle.Fill
+    pictureLeft.SizeMode <- PictureBoxSizeMode.Zoom
+
+    let pictureRight = new PictureBox()
+    pictureRight.Dock <- DockStyle.Fill
+    pictureRight.SizeMode <- PictureBoxSizeMode.Zoom
+
     status.Items.Add(statusLabel) |> ignore
     input.Dock <- DockStyle.Top
     btn.Dock <- DockStyle.Top
-    panel.Dock <- DockStyle.Fill
+    
     status.Dock <- DockStyle.Bottom
-    let centerImage () =
-        if picture.Image <> null then
-            let x = (panel.ClientSize.Width - picture.Width) / 2
-            let y = (panel.ClientSize.Height - picture.Height) / 2
-            picture.Location <- Point(max x 0, max y 0)
+    combo.Dock <- DockStyle.Top
+    split.Panel1.Controls.Add(pictureLeft)
+    split.Panel2.Controls.Add(pictureRight)
     form.Controls.Add(status)
-    panel.Resize.Add(fun _ -> centerImage())
+    form.Controls.Add(split)
+    form.Resize.Add(fun _ ->
+    split.SplitterDistance <- form.ClientSize.Width / 2
+    )
+
     btn.Click.Add(fun _ ->
-        let db = Int32.Parse(input.Text)
+    let db = Int32.Parse(input.Text)
 
-        let data = randomIntervallumok db
-        let (_, selected) = minimumVagopont data
-        let g = graf data
+    let data = randomIntervallumok db
+    let (_, selected) = minimumVagopont data
+    
+    
 
-        exportGraphviz g selected
-        runGraphviz()
-
-    // régi kép törlése
-        match picture.Image with
+    [pictureLeft; pictureRight]
+    |> List.iter (fun pic ->
+        match pic.Image with
         | null -> ()
         | img -> img.Dispose()
-        picture.SizeMode <- PictureBoxSizeMode.Zoom
-        picture.Dock <- DockStyle.Fill
-
-    // új kép betöltése
-        picture.Image <- loadImage "graf.png"
-        centerImage()
     )
+
+    let intervalImage = drawIntervals data
+
+    let graphImage =
+        let g = graf data
+        exportGraphviz g selected
+        runGraphviz()
+        loadImage "graf.png"
+
+    pictureLeft.SizeMode <- PictureBoxSizeMode.Zoom
+    pictureLeft.Dock <- DockStyle.Fill
+    pictureLeft.Image <- intervalImage
+
+    pictureRight.SizeMode <- PictureBoxSizeMode.Zoom
+    pictureRight.Dock <- DockStyle.Fill
+    pictureRight.Image <- graphImage
+
+    statusLabel.Text <- "Split view megjelenítve"
+    )
+        
     picture.MouseEnter.Add(fun _ ->
     if picture.Image <> null then
         statusLabel.Text <- "Kattints a képre a nagyításhoz"
@@ -227,22 +309,44 @@ let runGui () =
     picture.MouseLeave.Add(fun _ ->
     statusLabel.Text <- "Kész"
     )
-    picture.Click.Add(fun _ ->
-    if picture.Image <> null then
+    
+
+    pictureLeft.Click.Add(fun _ ->
+    if pictureLeft.Image <> null then
         let viewer = new Form(Text="Nagyított nézet", Width=1200, Height=800)
 
         let bigPic = new PictureBox(Dock=DockStyle.Fill)
-        bigPic.Image <- picture.Image
+        bigPic.Image <- pictureLeft.Image
         bigPic.SizeMode <- PictureBoxSizeMode.Zoom
 
         viewer.Controls.Add(bigPic)
         viewer.Show()
-    )   
+    )
+
+    pictureRight.Click.Add(fun _ ->
+        if pictureRight.Image <> null then
+            let viewer = new Form(Text="Nagyított nézet", Width=1200, Height=800)
+
+            let bigPic = new PictureBox(Dock=DockStyle.Fill)
+            bigPic.Image <- pictureRight.Image
+            bigPic.SizeMode <- PictureBoxSizeMode.Zoom
+
+            viewer.Controls.Add(bigPic)
+            viewer.Show()
+    )  
     
-    form.Controls.Add(panel)
+    
     form.Controls.Add(btn)
     form.Controls.Add(input)
     form.Controls.Add(status)
+    form.Controls.Add(combo)
+    form.Controls.Add(split)
+
+    split.SplitterDistance <- form.ClientSize.Width / 2
+
+    form.Resize.Add(fun _ ->
+    split.SplitterDistance <- form.ClientSize.Width / 2
+    )
 
     Application.Run(form)
 let rec menu () =
