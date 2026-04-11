@@ -150,3 +150,101 @@ due to sorting.
 <img width="660" height="1000" alt="graph" src="https://github.com/user-attachments/assets/76a8265c-e41f-4056-ae04-495dd1700512" />
 <p>Resolutin will be the set P which has the interval end which covers the whole graph. (Red squares with interval endin the picture above)
 
+##3. Useful scenarios
+
+## Use Cases of the Minimal Cut Algorithm
+
+### 1. Task Scheduling and Checkpoints
+
+In project management, tasks occupy time intervals.
+
+- Each task is an interval [start, end]  
+- A checkpoint is a specific time point  
+- Goal: choose the minimum number of checkpoints so every task is covered  
+
+The greedy algorithm selects optimal checkpoint times.
+
+---
+
+### 2. Surveillance Camera Placement
+
+Consider a road or corridor divided into segments.
+
+- Each segment is an interval  
+- Cameras can be placed at specific positions  
+- A camera covers all segments containing that point  
+
+The algorithm finds the minimum number of cameras needed.
+
+---
+
+### 3. Sensor Placement
+
+In monitoring systems:
+
+- Each activity period is an interval  
+- Sensors record at specific timestamps  
+- Goal: minimize the number of measurements  
+
+The algorithm ensures all intervals are observed efficiently.
+
+---
+
+### 4. Exam or Meeting Monitoring
+
+In scheduling supervision:
+
+- Each exam or meeting is an interval  
+- Supervisors check at specific times  
+- Goal: minimize the number of checks  
+
+The algorithm determines optimal inspection times.
+
+---
+
+### 5. Maintenance Scheduling
+
+For machines with service windows:
+
+- Each maintenance window is an interval  
+- A technician visits at specific times  
+- Each visit can handle all active machines  
+
+The algorithm minimizes the number of visits.
+
+---
+
+### 6. Network Packet Inspection
+
+In networking:
+
+- Each session is an interval  
+- Inspection happens at discrete times  
+- Goal: inspect all sessions with minimal checks  
+
+The algorithm finds optimal inspection points.
+
+---
+
+### 7. Event Logging
+
+In logging systems:
+
+- Each event spans an interval  
+- Logs are taken at specific times  
+- Every event must be recorded at least once  
+
+The algorithm minimizes logging operations.
+
+---
+
+### Summary
+
+In all cases:
+
+- Intervals represent time ranges or segments  
+- Points represent decisions or actions  
+- The goal is to cover all intervals with as few points as possible  
+
+This is exactly what the minimal cut (greedy) algorithm solves optimally.
+
