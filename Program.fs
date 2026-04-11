@@ -379,10 +379,6 @@ let rec menu () =
         menu()
 
     | "2" ->
-        printfn "Greedy algoritmus fut"
-        menu()
-
-    | "3" ->
         printfn "random intervallum generálása..."
         let db = readInt "Hány intervallumot generáljunk? "
         let randomLista = randomIntervallumok db
@@ -396,7 +392,7 @@ let rec menu () =
         runGraphviz()
         Process.Start(ProcessStartInfo("graf.png", UseShellExecute = true)) |> ignore
         menu()
-    | "4" ->
+    | "3" ->
         printfn "Greedy vs BruteForce összehasonlítás"
 
         let db = readInt "Hány intervallumot generáljunk? (max 15 ajánlott!) "
