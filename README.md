@@ -265,6 +265,8 @@ I create (populate) an externer program called Graphviz:
 ```text
 dot - graphviz version 14.1.2 (20260124.0452)
 ```
-for windows 64.bit
+for windows 64.bit. After installation you have to add it to the PATH variable:
+<img width="600" height="657" alt="image" src="https://github.com/user-attachments/assets/3b20f58a-b105-4223-b372-dc37419a7030" />
+
 
 
