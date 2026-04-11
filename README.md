@@ -273,7 +273,7 @@ for windows 64.bit. After installation you have to add it to the PATH variable:
 - .NET sdk 8.0
 - Wisual Studio Code
 
-##5. Dependencies
+## 5. Dependencies
 
 - System
 - System.Diagnostics
