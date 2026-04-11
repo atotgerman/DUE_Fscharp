@@ -248,3 +248,9 @@ In all cases:
 
 This is exactly what the minimal cut (greedy) algorithm solves optimally.
 
+## 3. Getting Started
+You can run with or without gui WPF by:
+<p align="center"><b>dotnet run gui</b></p>
+
+If you choose console application (without gui) you will get the following options:
+
