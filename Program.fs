@@ -254,7 +254,6 @@ let runGui () =
     btn.Dock <- DockStyle.Top
     
     status.Dock <- DockStyle.Bottom
-    combo.Dock <- DockStyle.Top
     split.Panel1.Controls.Add(pictureLeft)
     split.Panel2.Controls.Add(pictureRight)
     form.Controls.Add(status)
