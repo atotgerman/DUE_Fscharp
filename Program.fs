@@ -336,7 +336,6 @@ let runGui () =
     form.Controls.Add(btn)
     form.Controls.Add(input)
     form.Controls.Add(status)
-    form.Controls.Add(combo)
     form.Controls.Add(split)
 
     split.SplitterDistance <- form.ClientSize.Width / 2
