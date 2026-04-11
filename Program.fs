@@ -227,9 +227,7 @@ let drawIntervals (intervals: Intervall list) =
 let runGui () =
  
     let form = new Form(Text="Intervallum vizualizáló", Width=900, Height=600)
-    let combo = new ComboBox()
-    combo.Items.AddRange([| "Gráf"; "Intervallum" |])
-    combo.SelectedIndex <- 0
+    
     
     let input = new TextBox(Text="10")
     let btn = new Button(Text="Generate & Run")
