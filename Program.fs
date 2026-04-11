@@ -170,6 +170,8 @@ let loadImage path =
     use fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
     Image.FromStream(fs)
 let drawIntervals (intervals: Intervall list) =
+    let font = new Font("Arial", 10.0f)
+    let brush = Brushes.Black
     let width = 800
     let height = 400
 
@@ -222,6 +224,8 @@ let drawIntervals (intervals: Intervall list) =
         g.DrawLine(pen, x1, y, x2, y)
         g.FillEllipse(Brushes.Red, x1 - 3, y - 3, 6, 6)
         g.FillEllipse(Brushes.Red, x2 - 3, y - 3, 6, 6)
+        g.DrawString(string s, font, brush, float32 (x1 - 10), float32 (y - 20))
+        g.DrawString(string e, font, brush, float32 (x2 - 10), float32 (y - 20))
 
     bmp
 let runGui () =
