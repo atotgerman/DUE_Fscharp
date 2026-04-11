@@ -235,5 +235,5 @@ These are dual perspectives of the same structure:
 due to sorting.
 
 <img width="660" height="1000" alt="graph" src="https://github.com/user-attachments/assets/76a8265c-e41f-4056-ae04-495dd1700512" />
-Resolutin will be the set P which has the interval end which covers the whole graph. (Red squares with interval endin the picture above)
+<p>Resolutin will be the set P which has the interval end which covers the whole graph. (Red squares with interval endin the picture above)
 
