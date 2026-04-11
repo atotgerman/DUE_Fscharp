@@ -2,7 +2,7 @@
 
 # Minimal Cut
 
-## Minimal Cut (Greedy) Algorithm for Interval Scheduling
+## 1.Minimal Cut (Greedy) Algorithm for Interval Scheduling
 
 The minimal cut algorithm is a useful combinatorial algorithm for solving scheduling problems. The algorithm is very simple, yet it has a strong mathematical background in graph theory. Intervals are represented as nodes, and connections are established between them if they overlap.
 
@@ -101,7 +101,7 @@ Formally:
 
 ---
 
-## Objective
+### Objective
 
 Find a minimum number of cliques such that every node is included in at least one clique.
 
@@ -113,7 +113,7 @@ where each:
 
 ---
 
-## Greedy Strategy (Interval Partitioning)
+### Greedy Strategy (Interval Partitioning)
 
 For interval graphs, the clique cover problem is equivalent to **interval partitioning**:
 
@@ -122,7 +122,7 @@ For interval graphs, the clique cover problem is equivalent to **interval partit
 
 ---
 
-## Algorithm Idea
+### Algorithm Idea
 
 1. Sort intervals by starting point:
 
@@ -134,7 +134,7 @@ For interval graphs, the clique cover problem is equivalent to **interval partit
 
 ---
 
-## Key Property
+### Key Property
 
 The minimum number of cliques equals the maximum number of overlapping intervals at any point:
 
@@ -142,13 +142,13 @@ The minimum number of cliques equals the maximum number of overlapping intervals
 
 ---
 
-## Result
+### Result
 
 ![equality](https://latex.codecogs.com/png.image?%5Ctext%7BMinimum%20clique%20cover%7D%20%3D%20%5Comega%28G%29)
 
 ---
 
-## Clique Cover in Interval Graphs
+### Clique Cover in Interval Graphs
 
 In graph theory, a **clique cover** is a set of cliques such that every vertex of the graph belongs to at least one clique.
 
@@ -169,7 +169,7 @@ Formally:
 
 ---
 
-## Objective
+### Objective
 
 Find a minimum number of cliques such that every node is included in at least one clique.
 
@@ -181,7 +181,7 @@ where each:
 
 ---
 
-## Greedy Strategy (Interval Partitioning)
+### Greedy Strategy (Interval Partitioning)
 
 For interval graphs, the clique cover problem is equivalent to **interval partitioning**:
 
@@ -190,7 +190,7 @@ For interval graphs, the clique cover problem is equivalent to **interval partit
 
 ---
 
-## Algorithm Idea
+### Algorithm Idea
 
 1. Sort intervals by starting point:
 
@@ -202,7 +202,7 @@ For interval graphs, the clique cover problem is equivalent to **interval partit
 
 ---
 
-## Key Property
+### Key Property
 
 The minimum number of cliques equals the maximum number of overlapping intervals at any point:
 
@@ -210,13 +210,13 @@ The minimum number of cliques equals the maximum number of overlapping intervals
 
 ---
 
-## Result
+### Result
 
 ![equality](https://latex.codecogs.com/png.image?%5Ctext%7BMinimum%20clique%20cover%7D%20%3D%20%5Comega%28G%29)
 
 ---
 
-## Connection to Minimal Cut
+### Connection to Minimal Cut
 
 - The **minimal cut (hitting set)** selects points that intersect all intervals  
 - The **clique cover** groups intervals into overlapping sets  
@@ -228,7 +228,7 @@ These are dual perspectives of the same structure:
 
 ---
 
-## Complexity
+### Complexity
 
 ![complexity](https://latex.codecogs.com/png.image?O(n%5Clog%20n))
 
