@@ -259,4 +259,9 @@ If you choose console application (without gui) you will get the following optio
 3 - Greedy and Brute Force simulation (comparison)
 0 - Exit
 
+## 4. Prequsites
+I create (populate) an externer program called Graphviz:
+```text
+dot - graphviz version 14.1.2 (20260124.0452)
+
 
