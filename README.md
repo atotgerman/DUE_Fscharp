@@ -271,7 +271,7 @@ for windows 64.bit. After installation you have to add it to the PATH variable:
 <img width="600" height="657" alt="image" src="https://github.com/user-attachments/assets/3b20f58a-b105-4223-b372-dc37419a7030" />
 
 - .NET sdk 8.0
-- Wisual Studio Code
+- Visual Studio Code
 
 ## 5. Dependencies
 
@@ -280,6 +280,8 @@ for windows 64.bit. After installation you have to add it to the PATH variable:
 - System.Windows.Forms
 - System.Drawing
 - System.IO
+## 6. Installation
+
 
 
 
