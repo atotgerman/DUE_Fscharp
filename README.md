@@ -253,4 +253,9 @@ You can run with or without gui WPF by:
 <p align="center"><b>dotnet run gui</b></p>
 
 If you choose console application (without gui) you will get the following options:
+1 - Intervallumok /manual interval calculation/
+2 - Greedy /random intervall calculation/
+3 - Greedy and BruteForce simulation /compare greedy bruteforce mechanism/
+0 - Kilépés
+
 
