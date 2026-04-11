@@ -80,7 +80,7 @@ This problem is a special case of:
 which is generally NP-hard, but for intervals it can be solved optimally with a greedy algorithm.
 
 
-## Clique Cover in Interval Graphs
+## 2.Clique Cover in Interval Graphs
 
 In graph theory, a **clique cover** is a set of cliques such that every vertex of the graph belongs to at least one clique.
 
