@@ -282,6 +282,16 @@ for windows 64.bit. After installation you have to add it to the PATH variable:
 - System.IO
 ## 6. Installation
 
+Download with git clone:
+```text
+git clone https://github.com/atotgerman/DUE_Fscharp.git
+cd DUE_Fscharp
+
+dotnet restore
+
+dotnet run [GUI]
+```
+
 
 
 
