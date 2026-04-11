@@ -260,13 +260,26 @@ If you choose console application (without gui) you will get the following optio
 0 - Exit
 ```
 
-## 4. Prequsites
-I create (populate) an externer program called Graphviz:
+## 4. Prerequisites
+ - I create (populate) an externer program called Graphviz:
 ```text
 dot - graphviz version 14.1.2 (20260124.0452)
 ```
+Download: https://graphviz.org/download/
+
 for windows 64.bit. After installation you have to add it to the PATH variable:
 <img width="600" height="657" alt="image" src="https://github.com/user-attachments/assets/3b20f58a-b105-4223-b372-dc37419a7030" />
+
+- .NET sdk 8.0
+- Wisual Studio Code
+
+##5. Dependencies
+
+- System
+- System.Diagnostics
+- System.Windows.Forms
+- System.Drawing
+- System.IO
 
 
 
