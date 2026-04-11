@@ -122,18 +122,6 @@ For interval graphs, the clique cover problem is equivalent to **interval partit
 
 ---
 
-### Algorithm Idea
-
-1. Sort intervals by starting point:
-
-![sort](https://latex.codecogs.com/png.image?a_1%20%5Cleq%20a_2%20%5Cleq%20%5Cdots%20%5Cleq%20a_n)
-
-2. Assign each interval to the first compatible group (clique)
-
-3. If no group is available, create a new one
-
----
-
 ### Key Property
 
 The minimum number of cliques equals the maximum number of overlapping intervals at any point:
