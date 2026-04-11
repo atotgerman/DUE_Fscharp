@@ -353,8 +353,7 @@ let rec menu () =
     printfn ""
     printfn "1 - Intervallumok"
     printfn "2 - Greedy"
-    printfn "3 - Random teszt"
-    printfn "4 - Greedy and BruteForce simaulation" 
+    printfn "3 - Greedy and BruteForce simaulation" 
     printfn "0 - Kilépés"
 
     match Console.ReadLine() with
